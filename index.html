@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en">
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Surprise</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('bg-image.jpg') no-repeat center center/cover;
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+    .lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background-color: rgba(255, 255, 255, 0.85);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .lock-screen h1 {
+      font-size: 28px;
+      color: purple;
+      margin-bottom: 10px;
+      border: 3px solid orange;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .lock-screen p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .lock-screen input {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+    .lock-screen button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #cc0052;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .overlay {
+      background-color: transparent;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 90%;
+      color: black;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: black;
+    }
+    .image-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px auto;
+      max-width: 90%;
+    }
+    .image-gallery img {
+      width: 45%;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease-in-out;
+    }
+    .image-gallery img:hover {
+      transform: scale(1.05);
+    }
+    .gallery-heading {
+      text-align: center;
+      font-size: 22px;
+      color: black;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+    #main-content {
+      display: none;
+    }
+    #introVideo {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+      margin: 20px auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <audio id="birthdayMusic" src="birthday-song.mp3" autoplay loop></audio>  <div class="lock-screen" id="lockScreen">
+    <h1>🎉 Happy Birthday Bharti 🎉</h1>
+    <p>Enter the special code to unlock your surprise!</p>
+    <input type="text" id="unlockCode" placeholder="Enter your code"/>
+    <button onclick="checkCode()">Unlock Surprise</button>
+  </div>  <video id="introVideo" controls autoplay>
+    <source src="intro-animation.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>  <div id="main-content">
+    <div class="overlay">
+      <h2>Happy birthday, my love 💕</h2>
+      <p>
+        <!-- your existing birthday message here -->
+      </p>
+    </div><div class="gallery-heading">Sweet Memory</div>
+<div class="image-gallery">
+  <img src="img1.jpg" alt="Image 1">
+  <img src="img2.jpg" alt="Image 2">
+  <img src="img3.jpg" alt="Image 3">
+  <img src="img4.jpg" alt="Image 4">
+</div>
+
+  </div>  <script>
+    function checkCode() {
+      const code = document.getElementById("unlockCode").value;
+      if (code.trim().toLowerCase() === "baandru") {
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("introVideo").style.display = "block";
+
+        const video = document.getElementById("introVideo");
+        video.play();
+
+        video.onended = function() {
+          document.getElementById("introVideo").style.display = "none";
+          document.getElementById("main-content").style.display = "block";
+          const music = document.getElementById("birthdayMusic");
+          if (music.paused) music.play();
+        }
+      } else {
+        alert("Incorrect code. Please try again!");
+      }
+    }
+  </script></body>
+</html>
