@@ -1,246 +1,179 @@
-<!DOCTYPE html><html lang="en">
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Birthday Surprise</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: url('bg-image.jpg') no-repeat center center/cover;
-      background-attachment: fixed;
-      overflow-x: hidden;
-    }
-    .lock-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      width: 100vw;
-      background-color: rgba(255, 255, 255, 0.85);
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-    }
-    .lock-screen h1 {
-      font-size: 28px;
-      color: purple;
-      margin-bottom: 10px;
-      border: 3px solid orange;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    .lock-screen p {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    .lock-screen input {
-      padding: 10px;
-      font-size: 16px;
-      width: 80%;
-      max-width: 300px;
-      margin-bottom: 10px;
-    }
-    .lock-screen button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #cc0052;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .overlay {
-      background-color: transparent;
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 90%;
-      color: black;
-      font-size: 16px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      position: relative;
-      z-index: 1;
-    }
-    h2 {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 10px;
-      font-weight: bold;
-      color: black;
-    }
-    .image-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin: 20px auto;
-      max-width: 90%;
-    }
-    .image-gallery img {
-      width: 45%;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease-in-out;
-    }
-    .image-gallery img:hover {
-      transform: scale(1.05);
-    }
-    .gallery-heading {
-      text-align: center;
-      font-size: 22px;
-      color: black;
-      font-weight: bold;
-      margin-top: 40px;
-    }
-    #main-content {
-      display: none;
-    }
-    #introVideo {
-      display: none;
-      width: 100%;
-      max-width: 800px;
-      margin: 20px auto;
-      display: block;
-    }
-  </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Bharti ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: url('bg-image.jpg') no-repeat center center/cover;
+  background-attachment: fixed;
+  color: black;
+}
+
+.overlay {
+  padding: 20px;
+  max-width: 90%;
+  margin: auto;
+  white-space: pre-wrap;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h2 {
+  text-align: center;
+}
+
+#introVideo {
+  width: 100%;
+}
+
+#main-content {
+  display: none;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  background: black;
+  margin-left: 2px;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.image-gallery img {
+  width: 45%;
+  border-radius: 10px;
+}
+
+/* popup */
+#lovePopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 20px;
+}
+</style>
 </head>
+
 <body>
-  <audio id="birthdayMusic" src="birthday-song.mp3" autoplay loop></audio>  <div class="lock-screen" id="lockScreen">
-    <h1>🎉 Happy Birthday Bharti 🎉😘</h1>
-    <p>Enter the special code to unlock your surprise!</p>
-    <input type="text" id="unlockCode" placeholder="Enter your code"/>
-    <button onclick="checkCode()">Unlock Surprise</button>
-  </div>  <video id="introVideo" controls autoplay>
-    <source src="intro-animation.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>  <div id="main-content">
-    <div class="overlay">
-      <h2>𝑯𝒂𝒑𝒑𝒚 𝒃𝒊𝒓𝒕𝒉𝒅𝒂𝒚, 𝒎𝒚 𝒍𝒐𝒗𝒆 💕</h2>
-      <p>
-        🎉✨ 𝙁𝙞𝙧𝙨𝙩 𝙤𝙛 𝙖𝙡𝙡, 𝙃𝙖𝙥𝙥𝙮 𝘽𝙞𝙧𝙩𝙝𝙙𝙖𝙮 𝙢𝙚𝙧𝙚 𝙠𝙞𝙨𝙝𝙢𝙞𝙨𝙝! 😘🥳
 
-✨.•¨.¸.•¨.¸¸.•¨• ƸӜƷ
-🌸🌺🌸🌺🌸🌺🌸🌺
-Sprinkled with love ❤
-🌷🌻🌷🌻🌷🌻🌷🌻
-¨.¸.•¨. ¸.•¨.¸¸.•¨`*•.✨
-🌹🍀🌹🍀🌹🍀🌹🍀
+<audio id="music" src="birthday-song.mp3" loop></audio>
+<audio id="typingSound" src="typing.mp3"></audio>
 
-💖 Happy Birthday... 😘
-(⁠◍⁠•⁠ᴗ⁠•⁠◍⁠)⁠❤(⁠✿⁠ ⁠♡⁠‿⁠♡⁠)(⁠灬⁠º⁠‿⁠º⁠灬⁠)⁠♡
+<video id="introVideo" autoplay>
+  <source src="intro-animation.mp4" type="video/mp4">
+</video>
 
-¸¸.•¨•♫♪
-░H░A░P░P░Y░
-░B░I░R░T░H░D░A░Y░
-♪♫•¨•.¸¸♫♪
+<div id="main-content">
+  <div class="overlay">
+    <h2>Happy Birthday My Love 💕</h2>
+    <p id="typedText"></p><span class="cursor"></span>
+  </div>
 
-
-        💫 🅷🅰🅿🅿🅸🅴🆂🆃 🅱🅸🆁🆃🅷🅳🅰🆈, 🅼🆈 🅻🅾🆅🅴! 💫
-        
-𝓜𝓪𝔂 𝓪𝓵𝓵 𝓽𝓱𝓮 𝓼𝓽𝓪𝓻𝓼 ✨ 𝓲𝓷 𝔂𝓸𝓾𝓻 𝓭𝓮𝓼𝓽𝓲𝓷𝔂 𝓼𝓱𝓲𝓷𝓮. 𝓜𝓪𝔂 𝔂𝓸𝓾𝓻 𝓵𝓲𝓯𝓮 𝓫𝓮 𝓯𝓲𝓵𝓵𝓮𝓭 𝔀𝓲𝓽𝓱 𝓼𝔀𝓮𝓮𝓽 🧁 𝓶𝓸𝓶𝓮𝓷𝓽𝓼, 𝓱𝓪𝓹𝓹𝔂 😊 𝓼𝓶𝓲𝓵𝓮𝓼, 𝓪𝓷𝓭 𝓫𝓵𝓲𝓼𝓼𝓯𝓾𝓵 💫 𝓶𝓮𝓶𝓸𝓻𝓲𝓮𝓼. 𝓜𝓪𝔂 𝓽𝓱𝓲𝓼 𝓭𝓪𝔂 𝓰𝓲𝓿𝓮 𝔂𝓸𝓾 𝓪 𝓷𝓮𝔀 𝓫𝓮𝓰𝓲𝓷𝓷𝓲𝓷𝓰 𝓲𝓷 𝓵𝓲𝓯𝓮. 😇
-
-
-𝚈𝚘𝚞 ☺💖
-
-𝚈𝚘𝚞'𝚛𝚎 𝚖𝚢 𝚕𝚘𝚟𝚎 ❤
-
-𝚈𝚘𝚞'𝚛𝚎 𝚖𝚢 𝚑𝚊𝚙𝚙𝚒𝚗𝚎𝚜𝚜 ✨
-
-𝚈𝚘𝚞'𝚛𝚎 𝚖𝚢 𝚜𝚙𝚎𝚌𝚒𝚊𝚕 𝚘𝚗𝚎 😍
-
-𝚈𝚘𝚞'𝚛𝚎 𝚖𝚢 𝚜𝚘𝚞𝚕 𝚖𝚊𝚝𝚎 👀
-
-𝚈𝚘𝚞'𝚛𝚎 𝚖𝚢 𝚍𝚊𝚢𝚖𝚊𝚔𝚎𝚛 😍
-
-𝚈𝚘𝚞'𝚛𝚎 𝚖𝚢 𝚋𝚊𝚌𝚌𝚑𝚊 🙈
-
-
-
-
-
-𝑯𝒂𝒑𝒑𝒚 𝒃𝒊𝒓𝒕𝒉𝒅𝒂𝒚 𝒎𝒚 𝒍𝒐𝒗𝒆, 𝒎𝒚 𝒑𝒓𝒊𝒏𝒄𝒆𝒔𝒔 👸, 𝒎𝒚 𝒍𝒊𝒇𝒆 🌎, 𝒎𝒚 𝒋𝒂𝒂𝒏 🧬, 𝒎𝒚 𝒄𝒖𝒕𝒊𝒆 🥰, 𝒎𝒚 𝒔𝒘𝒆𝒆𝒕 𝒘𝒊𝒇𝒆 👰‍♀
-
-  𝑴𝒂𝒚 𝑴𝒂𝒉𝒂𝒅𝒆𝒗 📿 𝒂𝒍𝒘𝒂𝒚𝒔 𝒃𝒍𝒆𝒔𝒔 𝒚𝒐𝒖 🙌 𝒂𝒏𝒅 𝒈𝒊𝒗𝒆 𝒚𝒐𝒖 𝒆𝒗𝒆𝒓𝒚𝒕𝒉𝒊𝒏𝒈 𝒚𝒐𝒖 𝒆𝒗𝒆𝒓 𝒘𝒊𝒔𝒉 𝒇𝒐𝒓 💕. 𝑶𝒏 𝒕𝒉𝒊𝒔 𝒔𝒑𝒆𝒄𝒊𝒂𝒍 𝒅𝒂𝒚 ❤, 𝑰 𝒅𝒐𝒏'𝒕 𝒆𝒗𝒆𝒏 𝒌𝒏𝒐𝒘 𝒘𝒉𝒆𝒓𝒆 𝒕𝒐 𝒃𝒆𝒈𝒊𝒏 𝒃𝒆𝒄𝒂𝒖𝒔𝒆 𝒘𝒐𝒓𝒅𝒔 𝒘𝒊𝒍𝒍 𝒏𝒆𝒗𝒆𝒓 𝒃𝒆 𝒆𝒏𝒐𝒖𝒈𝒉 𝒕𝒐 𝒆𝒙𝒑𝒓𝒆𝒔𝒔 🤭 𝒉𝒐𝒘 𝒎𝒖𝒄𝒉 𝒚𝒐𝒖 𝒎𝒆𝒂𝒏 𝒕𝒐 𝒎𝒆 🥰.  
-
-𝑭𝒂𝒍𝒍𝒊𝒏𝒈 𝒊𝒏 𝒍𝒐𝒗𝒆 𝒘𝒊𝒕𝒉 𝒚𝒐𝒖 𝒘𝒂𝒔 𝒖𝒏𝒆𝒙𝒑𝒆𝒄𝒕𝒆𝒅, 𝒃𝒖𝒕 𝒕𝒉𝒆 𝒎𝒐𝒔𝒕 𝒑𝒆𝒓𝒇𝒆𝒄𝒕 𝒕𝒉𝒊𝒏𝒈 𝒕𝒉𝒂𝒕 𝒉𝒂𝒔 𝒆𝒗𝒆𝒓 𝒉𝒂𝒑𝒑𝒆𝒏𝒆𝒅 𝒕𝒐 𝒎𝒆 🫣. 𝒀𝒐𝒖'𝒗𝒆 𝒃𝒓𝒐𝒖𝒈𝒉𝒕 𝒍𝒊𝒈𝒉𝒕 𝒊𝒏𝒕𝒐 𝒎𝒚 𝒍𝒊𝒇𝒆 🌈 𝒊𝒏 𝒘𝒂𝒚𝒔 𝑰 𝒏𝒆𝒗𝒆𝒓 𝒊𝒎𝒂𝒈𝒊𝒏𝒆𝒅 🙈. 
-
- 𝑬𝒗𝒆𝒓𝒚 𝒅𝒂𝒚, 𝑰'𝒎 𝒊𝒏 𝒂𝒘𝒆 𝒐𝒇 𝒚𝒐𝒖𝒓 𝒌𝒊𝒏𝒅𝒏𝒆𝒔𝒔, 𝒚𝒐𝒖𝒓 𝒔𝒕𝒓𝒆𝒏𝒈𝒕𝒉, 𝒂𝒏𝒅 𝒚𝒐𝒖𝒓 𝒃𝒆𝒂𝒖𝒕𝒊𝒇𝒖𝒍 𝒉𝒆𝒂𝒓𝒕 💝.  
-
-𝒀𝒐𝒖 𝒂𝒓𝒆 𝒎𝒚 𝒉𝒐𝒎𝒆 🏡, 𝒎𝒚 𝒄𝒐𝒎𝒇𝒐𝒓𝒕 🫠, 𝒂𝒏𝒅 𝒎𝒚 𝒓𝒆𝒂𝒔𝒐𝒏 𝒕𝒐 𝒔𝒎𝒊𝒍𝒆 😁.  
-
-𝑻𝒐𝒅𝒂𝒚, 𝑰 𝒄𝒆𝒍𝒆𝒃𝒓𝒂𝒕𝒆 𝒏𝒐𝒕 𝒋𝒖𝒔𝒕 𝒚𝒐𝒖𝒓 𝒃𝒊𝒓𝒕𝒉𝒅𝒂𝒚 🎈 𝒃𝒖𝒕 𝒕𝒉𝒆 𝒊𝒏𝒄𝒓𝒆𝒅𝒊𝒃𝒍𝒆 𝒔𝒐𝒖𝒍 𝒕𝒉𝒂𝒕 𝒚𝒐𝒖 𝒂𝒓𝒆 😇. 𝑰 𝒍𝒐𝒗𝒆 𝒚𝒐𝒖 𝒆𝒏𝒅𝒍𝒆𝒔𝒔𝒍𝒚 ♾ 𝒂𝒏𝒅 𝑰 𝒄𝒂𝒏'𝒕 𝒘𝒂𝒊𝒕 𝒕𝒐 𝒄𝒓𝒆𝒂𝒕𝒆 𝒎𝒐𝒓𝒆 𝒃𝒆𝒂𝒖𝒕𝒊𝒇𝒖𝒍 𝒎𝒆𝒎𝒐𝒓𝒊𝒆𝒔 𝒘𝒊𝒕𝒉 𝒚𝒐𝒖 😍🥰.     
-
-💬 𝑯𝒂𝒂𝒏 𝒉𝒂𝒂𝒏... 𝒃𝒐𝒉𝒐𝒕 𝒉𝒐 𝒈𝒂𝒚𝒂 𝑬𝒏𝒈𝒍𝒊𝒔𝒉 😂 𝑨𝒃 𝒕𝒉𝒐𝒅𝒂 𝒂𝒑𝒏𝒊 𝒍𝒂𝒏𝒈𝒖𝒂𝒈𝒆 𝒎𝒆𝒊𝒏 𝒃𝒉𝒊 𝒉𝒐 𝒋𝒂𝒂𝒚𝒆 😅: 
- 𝑯𝒂𝒑𝒑𝒚 𝑩𝒊𝒓𝒕𝒉𝒅𝒂𝒚 𝑴𝒊𝒔𝒔 𝑾𝒐𝒓𝒍𝒅 🌎 👸 (𝑮𝒂𝒂𝒍𝒊 𝒎𝒂𝒕𝒕 𝒅𝒆𝒏𝒂 𝒌𝒊 𝒂𝒃𝒉𝒊 𝒕𝒂𝒌 𝒔𝒊𝒓𝒇 𝒆𝒌 𝒘𝒐𝒓𝒅 𝒃𝒐𝒍 𝒓𝒂𝒉𝒂 𝒕𝒉𝒂 😂) 
-
- 𝑩𝒉𝒂𝒓𝒕𝒊, 𝒕𝒖𝒎 𝒎𝒆𝒓𝒆 𝒍𝒊𝒚𝒆 𝒎𝒖𝒋𝒉𝒔𝒆 𝒃𝒉𝒊 𝒛𝒚𝒂𝒅𝒂 𝒛𝒂𝒓𝒖𝒓𝒊 𝒉𝒐 — 𝒋𝒂𝒊𝒔𝒆 𝒆𝒌 𝒊𝒏𝒔𝒂𝒂𝒏 𝒌𝒐 𝒋𝒆𝒆𝒏𝒆 𝒌𝒆 𝒍𝒊𝒚𝒆 𝒐𝒙𝒚𝒈𝒆𝒏 𝒄𝒉𝒂𝒉𝒊𝒚𝒆 𝒉𝒐𝒕𝒂 𝒉𝒂𝒊, 𝒘𝒂𝒊𝒔𝒆 𝒉𝒊 𝒎𝒖𝒋𝒉𝒆 𝒕𝒖𝒎 𝒄𝒉𝒂𝒉𝒊𝒚𝒆 𝒊𝒏 𝒐𝒏𝒆 𝒘𝒐𝒓𝒅 𝒖 𝒂𝒓𝒆 𝒎𝒚 𝒐𝒙𝒈𝒚𝒈𝒆𝒏. 
- 𝑴𝒂𝒊𝒏 𝒌𝒂𝒃𝒉𝒊 𝒊𝒎𝒂𝒈𝒊𝒏𝒆 𝒃𝒉𝒊 𝒏𝒂𝒉𝒊 𝒌𝒂𝒓 𝒔𝒂𝒌𝒕𝒂 𝒌𝒊 𝒉𝒖𝒎 𝒌𝒂𝒃𝒉𝒊 𝒂𝒍𝒂𝒈 𝒉𝒐 𝒋𝒂𝒂𝒚𝒆𝒊𝒏... 𝒔𝒐𝒄𝒉𝒏𝒂 𝒃𝒉𝒊 𝒃𝒖𝒓𝒂 𝒍𝒂𝒈𝒕𝒂 𝒉𝒂𝒊. 𝑰𝒔𝒍𝒊𝒚𝒆, 𝒊𝒈𝒏𝒐𝒓𝒆 𝒌𝒂𝒓𝒐 😅 𝒂𝒖𝒓 𝒂𝒂𝒈𝒆 𝒃𝒂𝒅𝒉𝒕𝒆 𝒉𝒂𝒊𝒏. 
- 𝑴𝒖𝒋𝒉𝒆 𝒕𝒉𝒐𝒅𝒂 𝒃𝒖𝒓𝒂 𝒍𝒂𝒈 𝒓𝒂𝒉𝒂 𝒉𝒂𝒊 𝒌𝒊 𝒎𝒂𝒊𝒏 𝒕𝒖𝒎𝒉𝒂𝒓𝒆 𝒑𝒂𝒂𝒔 𝒏𝒂𝒉𝒊 𝒉𝒐𝒐𝒏 𝒂𝒂𝒋 𝒕𝒖𝒎𝒉𝒂𝒓𝒆 𝒃𝒊𝒓𝒕𝒉𝒅𝒂𝒚 𝒑𝒆... 𝒑𝒂𝒓 𝒏𝒆𝒙𝒕 𝒚𝒆𝒂𝒓 𝒑𝒐𝒐𝒓𝒊 𝒌𝒐𝒔𝒉𝒊𝒔𝒉 𝒓𝒂𝒉𝒆𝒈𝒊 𝒌𝒊 𝒎𝒂𝒊𝒏 𝒕𝒖𝒎𝒉𝒂𝒓𝒆 𝒑𝒂𝒂𝒔 𝒓𝒂𝒉𝒖𝒏 𝒂𝒖𝒓 𝒉𝒖𝒎 𝒅𝒐𝒏𝒐 𝒎𝒊𝒍𝒌𝒆 𝒄𝒆𝒍𝒆𝒃𝒓𝒂𝒕𝒆 𝒌𝒂𝒓𝒆𝒊𝒏𝒈𝒆 🥳𝒉𝒆𝒉𝒆𝒉𝒆𝒉𝒆𝒉𝒆𝒉𝒆  
-𝒐𝒓 𝒆𝒔 𝒍𝒖𝒄𝒌𝒚 𝒑𝒆𝒓𝒔𝒐𝒏 𝒌𝒐 𝒉𝒂𝒎𝒆𝒔𝒉𝒂 𝒍𝒖𝒄𝒌𝒚 𝒃𝒂𝒏𝒂𝒕𝒆 𝒓𝒆𝒉𝒏𝒂 𝒂𝒑𝒏𝒆 𝒑𝒚𝒂𝒂𝒓 𝒔𝒆 𝒌𝒚𝒖𝒏𝒌𝒊           𝑴𝒖𝒋𝒉𝒆 𝒑𝒂𝒕𝒂 𝒉𝒂𝒊 𝒎𝒂𝒊 𝒋𝒊𝒕𝒏𝒂 𝒏𝒉𝒊 𝒅𝒆𝒔𝒆𝒓𝒗𝒆😚😌 𝒌𝒂𝒓𝒕𝒂 𝒉𝒐𝒐𝒏 𝒖𝒔𝒔𝒆 𝒌𝒂𝒉𝒊𝒏 𝒛𝒚𝒂𝒅𝒂 𝒎𝒊𝒍𝒂 𝒉𝒂𝒊... 𝒊𝒔𝒍𝒊𝒚𝒆 𝒕𝒖𝒎𝒉𝒆 𝒌𝒂𝒃𝒉𝒊 𝒌𝒉𝒐𝒏𝒂 𝒏𝒂𝒉𝒊 𝒄𝒉𝒂𝒉𝒕𝒂. 𝒊𝒔𝒌𝒐 𝒔𝒂𝒃 𝒔𝒆 𝒄𝒉𝒖𝒑𝒂🫣 𝒌𝒓𝒓 𝒓𝒂𝒌𝒉𝒏𝒂 𝒄𝒉𝒂𝒉𝒕𝒂 𝒉𝒖𝒏 𝒌𝒚𝒖𝒏𝒌𝒊 𝒂𝒂𝒑𝒌𝒐 𝒑𝒕𝒂 𝒉𝒊 𝒉𝒐𝒈𝒂 𝒌𝒊 𝒊𝒔 𝒅𝒖𝒏𝒊𝒚𝒂 𝒎𝒆𝒊𝒏 𝒌𝒊𝒔𝒊 𝒌𝒐 𝒌𝒊𝒔𝒊 𝒌𝒊 𝒌𝒖𝒔𝒉𝒊 𝒉𝒂𝒛𝒂𝒎 𝒏𝒉𝒊 𝒉𝒐𝒕𝒊 𝒐𝒓 𝒚𝒆𝒉 𝒕𝒐𝒉 𝒑𝒓𝒐𝒗𝒆𝒅✅ 𝒉𝒊 𝒉𝒂𝒊 𝒌𝒊 𝒏𝒂𝒛𝒂𝒓 𝒊𝒔 𝒓𝒆𝒂𝒍 𝒊𝒔𝒍𝒊𝒚𝒆 𝒂𝒂𝒑𝒌𝒐 𝒂𝒑𝒏𝒆 𝒅𝒊𝒍 𝒌𝒆 𝒂𝒏𝒅𝒂𝒓 𝒄𝒉𝒖𝒑𝒂😶‍🌫️😌 𝒌𝒓𝒓 𝒓𝒂𝒌𝒉𝒖𝒏𝒈𝒂 𝒉𝒂𝒎𝒆𝒔𝒉𝒂 𝒉𝒂𝒎𝒆𝒔𝒉𝒂 𝒌𝒆 𝒍𝒊𝒚𝒆 𝒌𝒚𝒖𝒏𝒌𝒊 𝑻𝒖𝒎 𝒎𝒆𝒓𝒊 𝒅𝒖𝒏𝒊𝒚𝒂 𝒌𝒂 𝒔𝒂𝒃𝒔𝒆 𝒑𝒓𝒆𝒄𝒊𝒐𝒖𝒔 𝒅𝒊𝒂𝒎𝒐𝒏𝒅 💎 𝒉𝒐 — 𝒂𝒖𝒓 𝒅𝒊𝒂𝒎𝒐𝒏𝒅 𝒌𝒐 𝒅𝒖𝒏𝒊𝒚𝒂 𝒌𝒆 𝒏𝒂𝒛𝒂𝒓 𝒔𝒆 𝒄𝒉𝒉𝒖𝒑𝒂 𝒌𝒆 𝒓𝒂𝒌𝒉𝒏𝒂 𝒑𝒂𝒅𝒕𝒂 𝒉𝒂𝒊 😝 𝒏𝒉𝒊 𝒕𝒐𝒉 𝒅𝒐𝒈𝒍𝒆𝒃𝒂𝒂𝒛 𝒅𝒖𝒏𝒊𝒚𝒂 𝒎𝒆𝒊𝒏 𝒄𝒉𝒐𝒓𝒊 𝒉𝒐 𝒋𝒂𝒂𝒕𝒊 𝒉𝒂𝒊😒😒 
-
- 𝑴𝒂𝒊𝒏 𝒉𝒂𝒎𝒆𝒔𝒉𝒂 𝒕𝒖𝒎𝒔𝒆 𝒌𝒉𝒖𝒅 𝒔𝒆 𝒃𝒉𝒊 𝒛𝒚𝒂𝒅𝒂 𝒑𝒚𝒂𝒂𝒓 𝒌𝒂𝒓𝒖𝒏𝒈𝒂, 𝒂𝒖𝒓 𝒚𝒆𝒉 𝒎𝒆𝒓𝒂 𝒑𝒓𝒐𝒎𝒊𝒔𝒆 𝒉𝒂𝒊 💞 𝒂𝒂𝒈𝒆 𝒃𝒂𝒅𝒉 𝒋𝒂𝒂𝒚𝒆 𝒊𝒔𝒌𝒂 𝒈𝒂𝒓𝒂𝒏𝒕𝒆𝒆 𝒎𝒂𝒊 𝒏𝒉𝒊 𝒍𝒆𝒕𝒂 𝒃𝒖𝒕 𝒉𝒂𝒂𝒏 𝒌𝒂𝒏 𝒏𝒉𝒊 𝒉𝒐𝒏𝒆 𝒅𝒖𝒏𝒅𝒂 𝒊𝒔𝒔𝒌𝒂 𝒎𝒂𝒊 𝒇𝒖𝒍𝒍💯 𝒈𝒂𝒓𝒂𝒏𝒕𝒆𝒆 𝒍𝒆𝒕𝒂 𝒉𝒖𝒏🥰🥰  💫
-
- 𝑩𝒉𝒂𝒈𝒘𝒂𝒏 𝒔𝒆 𝒃𝒂𝒔 𝒊𝒕𝒏𝒂 𝒉𝒊 𝒎𝒂𝒏𝒈𝒕𝒂 𝒉𝒐𝒐𝒏 𝒌𝒊 𝒚𝒆 𝒄𝒉𝒉𝒐𝒕𝒊 𝒔𝒊 𝒄𝒉𝒖𝒅𝒂𝒊𝒍 𝒎𝒆𝒓𝒊 𝒍𝒊𝒇𝒆 𝒎𝒆𝒊𝒏 𝒑𝒆𝒓𝒎𝒂𝒏𝒆𝒏𝒕 𝒉𝒐 𝒋𝒂𝒂𝒚𝒆 😅 — 𝒋𝒊𝒔𝒌𝒆 𝒔𝒂𝒂𝒕𝒉 𝒎𝒖𝒋𝒉𝒆 𝒑𝒖𝒓𝒊 𝒍𝒊𝒇𝒆 𝒃𝒊𝒕𝒂𝒏𝒊 𝒉𝒂𝒊, 𝒑𝒚𝒂𝒂𝒓 𝒔𝒆, 𝒎𝒂𝒔𝒕𝒊 𝒔𝒆, 𝒓𝒐𝒎𝒂𝒏𝒄𝒆 𝒔𝒆, 𝒂𝒖𝒓 𝒃𝒐𝒉𝒐𝒕 𝒔𝒂𝒂𝒓𝒆 𝒕𝒓𝒊𝒑𝒔 𝒌𝒆 𝒔𝒂𝒂𝒕𝒉 🌍💃🕺         
- 𝒐𝒓 𝒃𝒉𝒂𝒈𝒘𝒂𝒏 𝒋𝒊𝒊 𝒎𝒂𝒊 𝒂𝒂𝒑 𝒔𝒆 𝒑𝒓𝒐𝒎𝒊𝒄𝒆 🤝𝒌𝒓𝒕𝒂 𝒉𝒖𝒏 𝒌𝒊 𝒆𝒌 𝒃𝒂𝒂𝒓 𝒂𝒂𝒑 𝒎𝒆𝒌𝒐 𝒊𝒔 𝒄𝒖𝒕𝒊𝒆 𝒌𝒐 𝒅𝒆 𝒅𝒐 𝒑𝒂𝒌𝒌𝒂 𝒎𝒂𝒊 𝒊𝒔𝒌𝒂 𝒅𝒊𝒍 𝒔𝒆 𝒄𝒂𝒓𝒆 𝒌𝒓𝒖𝒏𝒈𝒂 𝒊𝒔𝒌𝒂 𝒉𝒂𝒓 𝒆𝒌 𝒃𝒂𝒂𝒕 𝒎𝒂𝒂𝒏𝒖𝒈𝒂 𝒋𝒐 𝒃𝒐𝒍𝒆𝒈𝒊 𝒔𝒂𝒃 𝒌𝒓𝒖𝒏𝒈𝒂 🥰🥰𝒑𝒂𝒌𝒌𝒂 𝒘𝒂𝒍𝒂𝒂 𝒑𝒓𝒐𝒎𝒊𝒔𝒆 𝒎𝒂𝒊 𝒃𝒐𝒉𝒐𝒕 𝒋𝒂𝒅𝒂 𝒌𝒂𝒉𝒚𝒂𝒍 𝒓𝒂𝒉𝒖𝒏𝒈𝒂 𝒃𝒔𝒔 𝒆 𝒃𝒂𝒂𝒓 𝒅𝒆 𝒌𝒓𝒓 𝒕𝒐𝒉 𝒅𝒆𝒌𝒉𝒐      🌈 
-𝑩𝒉𝒂𝒓𝒕𝒊, 𝒍𝒊𝒇𝒆 𝒎𝒆𝒊𝒏 𝒉𝒂𝒎𝒆𝒔𝒉𝒂 𝒉𝒂𝒔𝒕𝒊 𝒓𝒂𝒉𝒐, 𝒎𝒂𝒔𝒕𝒊 𝒎𝒆𝒊𝒏 𝒓𝒂𝒉𝒐, 𝒕𝒖𝒎𝒉𝒂𝒓𝒆 𝒅𝒂𝒂𝒏𝒕 𝒃𝒉𝒂𝒈𝒘𝒂𝒏 𝒏𝒆 𝒔𝒑𝒆𝒄𝒊𝒂𝒍 𝒅𝒆𝒔𝒊𝒈𝒏 𝒌𝒊𝒚𝒆 𝒉𝒂𝒊𝒏 😁 — 𝒕𝒐𝒉 𝒖𝒏𝒌𝒂 𝒇𝒖𝒍𝒍 𝒖𝒔𝒆 𝒌𝒂𝒓𝒐 😂 𝒆𝒌𝒅𝒂𝒎 𝒅𝒂𝒂𝒏𝒕 𝒇𝒂𝒂𝒅 𝒌𝒓 𝒉𝒆𝒉𝒆𝒉𝒆𝒉𝒆𝒉𝒆 😁😁𝒌𝒓𝒓 𝒌𝒆 𝒉𝒂𝒔𝒔𝒐 𝒄𝒖𝒕𝒆 𝒍𝒂𝒈𝒕𝒊 𝒉𝒐🫠  
-𝑨𝒈𝒂𝒓 𝒎𝒂𝒊𝒏𝒆 𝒃𝒊𝒓𝒕𝒉𝒅𝒂𝒚 𝒑𝒆 𝒌𝒖𝒄𝒉 𝒌𝒂𝒎 𝒌𝒂𝒓 𝒅𝒊𝒚𝒂 𝒉𝒐 𝒕𝒐𝒉 𝒎𝒂𝒂𝒇 𝒌𝒂𝒓𝒏𝒂 — 𝒑𝒂𝒓 𝒎𝒂𝒊𝒏𝒆 𝒅𝒊𝒍 𝒔𝒆 100% 𝒅𝒊𝒚𝒂 𝒉𝒂𝒊 💯 𝒌𝒊 𝒕𝒖𝒎𝒉𝒆 𝒆𝒌 𝒖𝒏𝒊𝒒𝒖𝒆 𝒇𝒆𝒆𝒍 𝒉𝒐 𝒕𝒐𝒅𝒂𝒚.  
-🤲 𝑩𝒉𝒂𝒈𝒘𝒂𝒏 𝒔𝒆 𝒅𝒖𝒂 𝒉𝒂𝒊 𝒌𝒊 𝒏𝒆𝒙𝒕 𝒚𝒆𝒂𝒓 𝒉𝒖𝒎 𝒔𝒂𝒂𝒕𝒉 𝒎𝒆𝒊𝒏 𝒄𝒆𝒍𝒆𝒃𝒓𝒂𝒕𝒆 𝒌𝒂𝒓𝒆𝒊𝒏 🥂 𝒂𝒖𝒓 𝒕𝒖𝒎 𝒎𝒆𝒓𝒊 𝒍𝒊𝒇𝒆 𝒎𝒆𝒊𝒏 𝒉𝒂𝒎𝒆𝒔𝒉𝒂 𝒓𝒂𝒂𝒉𝒐 — 𝒌𝒚𝒖𝒏𝒌𝒊 𝒕𝒖𝒎𝒏𝒆 𝒎𝒆𝒓𝒆 𝒊𝒔 𝒃𝒆𝒋𝒂𝒂𝒏 𝒍𝒊𝒇𝒆 𝒎𝒆𝒊𝒏 𝒄𝒉𝒂𝒂𝒓 𝒄𝒉𝒂𝒂𝒏𝒅 𝒍𝒂𝒈𝒂 𝒅𝒊𝒚𝒆 🌙✨
-
-
-
-❤ 𝗜 𝗹𝗼𝘃𝗲 𝘆𝗼𝘂... 
-  𝗠𝗲𝗿𝗲 𝗷𝗮𝗮𝗻 💞  
-  𝗠𝗲𝗿𝗲 𝗰𝘂𝘁𝗶𝗲 🥰  
-  𝗠𝗲𝗿𝗲 𝗹𝗶𝗳𝗲 𝗽𝗮𝗿𝘁𝗻𝗲𝗿 ❤  
-  𝗠𝗲𝗿𝗲 𝘀𝘄𝗲𝗲𝘁𝗵𝗲𝗮𝗿𝘁 😘  
-  𝗠𝗲𝗿𝗲 𝗰𝘂𝘁𝗲 𝘄𝗶𝗳𝗲 😘  
-  𝗠𝗲𝗿𝗲 𝗹𝗶𝗳𝗲 𝗹𝗶𝗻𝗲 💓  
-  𝗠𝗲𝗿𝗲 𝗕𝗵𝗮𝗿𝘁𝘂 😘
-
-𝕴 𝖑𝖔𝖛𝖊 𝖞𝖔𝖚 ♾♾❤❤😘❤❤ (𝖙𝖎𝖒𝖊𝖘 𝖎𝖓𝖋𝖎𝖓𝖎𝖙𝖞)✍
-
----
-
-🎉🎊 And last but not the least... 🎂 Happy Birthday My Lyf 💞
-
-🧿❤🌹✨💑🎈🎉🥳💌🥰💖
-      </p>
-    </div><div class="gallery-heading">✌𝓢𝔀𝓮𝓮𝓽 𝓜𝓮𝓶𝓸𝓻𝔂✌</div>
-<div class="image-gallery">
-  <img src="img1.jpg" alt="Image 1">
-  <img src="img2.jpg" alt="Image 2">
-  <img src="img3.jpg" alt="Image 3">
-  <img src="img4.jpg" alt="Image 4">
+  <div class="image-gallery">
+    <img src="img1.jpg">
+    <img src="img2.jpg">
+    <img src="img3.jpg">
+    <img src="img4.jpg">
+  </div>
 </div>
 
-  </div>  <script>
-    function checkCode() {
-      const code = document.getElementById("unlockCode").value;
-      if (code.trim().toLowerCase() === "baandru") {
-        document.getElementById("lockScreen").style.display = "none";
-        document.getElementById("introVideo").style.display = "block";
+<div id="lovePopup">
+  <div class="popup-box">
+    ❤️ I Love You Bharti ❤️
+  </div>
+</div>
 
-        const video = document.getElementById("introVideo");
-        video.play();
+<script>
 
-        video.onended = function() {
-          document.getElementById("introVideo").style.display = "none";
-          document.getElementById("main-content").style.display = "block";
-          const music = document.getElementById("birthdayMusic");
-          if (music.paused) music.play();
-        }
-      } else {
-        alert("Incorrect code. Please try again!");
-      }
-    }
-  </script></body>
+const text = `🎉 Happy Birthday meri jaan Bharti 😘💖
+
+Aaj ka din sirf tumhare liye hai...
+Tum meri life ki sabse pyari aur special person ho 💕
+
+Tum meri smile ho 😊  
+Tum meri happiness ho ✨  
+Tum meri duniya ho 🌍  
+
+Jab bhi main tumhe dekhta hoon na...
+Dil automatically smile kar deta hai 😍
+
+Main tumse itna pyaar karta hoon ki words me express karna mushkil hai 💞  
+
+Main hamesha tumhare saath rahunga 🤝  
+Chahe situation kaisi bhi ho ❤️  
+
+Aur haan...
+Next birthday hum saath celebrate karenge 🥳🎂  
+
+Tum meri ho... aur hamesha rahogi 💖  
+
+I love you sooo much Bharti 😘💞  
+Forever and ever ♾❤️`;
+
+let i = 0;
+
+function typeWriter() {
+  if (i < text.length) {
+    document.getElementById("typedText").innerHTML += text.charAt(i);
+
+    let sound = document.getElementById("typingSound");
+    sound.currentTime = 0;
+    sound.play();
+
+    i++;
+    window.scrollTo(0, document.body.scrollHeight);
+
+    setTimeout(typeWriter, 30);
+  } else {
+    // typing complete → popup show
+    setTimeout(() => {
+      document.getElementById("lovePopup").style.display = "flex";
+    }, 1000);
+  }
+}
+
+const video = document.getElementById("introVideo");
+
+video.onended = function() {
+  video.style.display = "none";
+  document.getElementById("main-content").style.display = "block";
+
+  document.getElementById("music").play();
+
+  typeWriter();
+};
+
+</script>
+
+</body>
 </html>
-
